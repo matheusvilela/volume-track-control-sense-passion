@@ -239,6 +239,8 @@
 
 .field mIncallPowerBehavior:I
 
+.field mIsLongPress:Z
+
 .field mIsSYM_Switch:Z
 
 .field mIsSpaceCustomized:Z
@@ -6973,7 +6975,7 @@
     :vc_finish
 
     .line 2692
-    if-eqz v19, :cond_172 # Volume must be set on release key
+    if-eqz v19, :cond_172 # Media volume must be set on release key
 
     .line 2693
     invoke-static {}, Lcom/android/internal/policy/impl/PhoneWindowManager;->getTelephonyService()Lcom/android/internal/telephony/ITelephony;
@@ -7083,6 +7085,13 @@
 
     if-nez v7, :cond_a2
 
+    #verify if a track switch has occured
+    move-object/from16 v7, p0
+
+    iget-boolean v7, v7, Lcom/android/internal/policy/impl/PhoneWindowManager;->mIsLongPress:Z
+
+    if-nez v7, :vc_donothing
+
     .line 2730
     const/4 v7, 0x3
 
@@ -7097,6 +7106,23 @@
     const-string v0, "WindowManager"
     const-string v1, "Handle Volume second"
     invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    goto/16 :goto_a2
+
+    # set mIsLongPress to false and return
+    :vc_donothing
+
+    const-string v0, "WindowManager"
+    const-string v1, "Handle Volume: do nothing"
+    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    const/4 v7, 0x0
+
+    move v0, v7
+
+    move-object/from16 v1, p0
+
+    iput-boolean v0, v1, Lcom/android/internal/policy/impl/PhoneWindowManager;->mIsLongPress:Z
 
     goto/16 :goto_a2
 
@@ -10702,6 +10728,18 @@
     const/4 v5, 0x0
 
     invoke-virtual {v4, v12, v5}, Landroid/content/Context;->sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;)V
+
+
+    const-string v8, "WindowManager"
+    const-string v9, "Handle Volume: set to true"
+    invoke-static {v8, v9}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    # Set mIsLongPress to true
+    const/4 v8, 0x1
+
+    move-object/from16 v9, p0
+
+    iput-boolean v8, v9, Lcom/android/internal/policy/impl/PhoneWindowManager;->mIsLongPress:Z
 
     return-void
 .end method
