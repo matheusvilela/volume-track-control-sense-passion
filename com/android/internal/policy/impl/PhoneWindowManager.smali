@@ -6964,13 +6964,13 @@
 
     if-nez v8, :vc_finish # If screen on, do nothing
 
-    if-eqz v19, :vc_cancel  # If user released button, cancel next track event
+    if-eqz v19, :vc_cancel  # If user released button, cancel switch track event
 
     move-object/from16 v0, p0
 
     move/from16 v1, p5
 
-    invoke-virtual {v0, v1}, Lcom/android/internal/policy/impl/PhoneWindowManager;->handleVolumeLongPress(I)V # Set next track event
+    invoke-virtual {v0, v1}, Lcom/android/internal/policy/impl/PhoneWindowManager;->handleVolumeLongPress(I)V # Set switch track event
 
     goto :vc_finish
 
@@ -7049,10 +7049,6 @@
 
     invoke-virtual {v0, v1, v2}, Lcom/android/internal/policy/impl/PhoneWindowManager;->handleVolumeKey(II)V
 
-    const-string v0, "WindowManager"
-    const-string v1, "Handle Volume first"
-    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
     :try_end_162
     .catch Landroid/os/RemoteException; {:try_start_14f .. :try_end_162} :catch_164
 
@@ -7108,10 +7104,6 @@
     move/from16 v2, p5
 
     invoke-virtual {v0, v1, v2}, Lcom/android/internal/policy/impl/PhoneWindowManager;->handleVolumeKey(II)V
-
-    const-string v0, "WindowManager"
-    const-string v1, "Handle Volume second"
-    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
     goto/16 :goto_a2
 
@@ -10734,11 +10726,6 @@
     const/4 v5, 0x0
 
     invoke-virtual {v4, v12, v5}, Landroid/content/Context;->sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;)V
-
-
-    const-string v8, "WindowManager"
-    const-string v9, "Handle Volume: set to true"
-    invoke-static {v8, v9}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
     # Set mIsLongPress to true
     const/4 v8, 0x1
