@@ -6958,6 +6958,12 @@
 
     if-eqz v8, :vc_finish  # If not music active, do nothing
 
+    move-object/from16 v8, p0
+
+    iget-boolean v8, v8, Lcom/android/internal/policy/impl/PhoneWindowManager;->mScreenOn:Z
+
+    if-nez v8, :vc_finish # If screen on, do nothing
+
     if-eqz v19, :vc_cancel  # If user released button, cancel next track event
 
     move-object/from16 v0, p0
